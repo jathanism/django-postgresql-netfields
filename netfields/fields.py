@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 from IPy import IP
 
 from django.db import models
@@ -33,13 +35,13 @@ class _NetAddressField(models.Field):
             lookup_type, value)
 
 
-    def get_db_prep_value(self, value):
+    def get_db_prep_value(self, value, connection, prepared=False):
         if value is None:
             return value
 
         return unicode(self.to_python(value))
 
-    def get_db_prep_lookup(self, lookup_type, value):
+    def get_db_prep_lookup(self, lookup_type, value, connection, prepared=False):
         if value is None:
             return value
 
@@ -61,7 +63,7 @@ class InetAddressField(_NetAddressField):
     max_length = 39
     __metaclass__ = models.SubfieldBase
 
-    def db_type(self):
+    def db_type(self, connection):
         return 'inet'
 
 
@@ -70,7 +72,7 @@ class CidrAddressField(_NetAddressField):
     max_length = 43
     __metaclass__ = models.SubfieldBase
 
-    def db_type(self):
+    def db_type(self, connection):
         return 'cidr'
 
 
@@ -81,7 +83,7 @@ class MACAddressField(models.Field):
         kwargs['max_length'] = 17
         super(MACAddressField, self).__init__(*args, **kwargs)
 
-    def db_type(self):
+    def db_type(self, connection):
         return 'macaddr'
 
     def formfield(self, **kwargs):

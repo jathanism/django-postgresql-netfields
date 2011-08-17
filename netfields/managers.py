@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 from IPy import IP
 
 from django.db import models, connection
